@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-//TODO NEXT: Connect to a database
+//TODO NEXT: 
 //Wireframe project
 
 function App() {

@@ -1,13 +1,14 @@
 const express = require('express');
 require('dotenv').config();
-require('./db/db-config');
 const path = require('node:path'); 
 const app = express();
 const port = 8080;
+const bodyParser = require('body-parser');
 
-
+app.use(bodyParser.json());
 
 app.use('/users', require('./routes/user-route'));
+app.use('/songs', require('./routes/song-route'));
 
 app.get('/test', (req, res) => {
   res.status(200).send('test test test!!');

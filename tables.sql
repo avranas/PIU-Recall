@@ -1,5 +1,5 @@
--- drop table score;
--- drop table chart;
+-- drop table scores;
+-- drop table charts;
 -- drop table users;
 -- drop table songs;
 
@@ -22,17 +22,18 @@ CREATE TABLE songs (
   updated_at date NOT NULL
 );
 
-CREATE TABLE chart (
+CREATE TABLE charts (
   id SERIAL PRIMARY KEY,
+  style text NOT NULL,
   rating integer NOT NULL, --For co-op: number of players
-  max_perfects integer NOT NULL,
+  max_combo integer NOT NULL,
   song_id integer NOT NULL,
   created_at date NOT NULL,
   updated_at date NOT NULL,
   FOREIGN KEY(song_id) REFERENCES songs(id)
 );
 
-CREATE TABLE score (
+CREATE TABLE scores (
   id SERIAL PRIMARY KEY,
   greats integer,
   goods integer,
@@ -46,7 +47,7 @@ CREATE TABLE score (
   created_at date NOT NULL,
   updated_at date NOT NULL,
   FOREIGN KEY(user_id) REFERENCES users(id),
-  FOREIGN KEY(chart_id) REFERENCES chart(id)
+  FOREIGN KEY(chart_id) REFERENCES charts(id)
 );
 
 -- INSERT INTO users(username, password, created_at, updated_at)
