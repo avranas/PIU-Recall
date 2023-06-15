@@ -1,17 +1,29 @@
 const { DataTypes } = require('sequelize');
 const pool = require('../db-config');
-const Song = require("./Song");
+const Song = require('./Song');
 
-const Chart = pool.define('Chart', {
-  style: DataTypes.STRING,
-  rating: DataTypes.INTEGER,
-  max_combo: DataTypes.INTEGER,
-  song_id: DataTypes.INTEGER
-}, {
-  underscored: true,
+const Chart = pool.define(
+  'chart',
+  {
+    style: DataTypes.STRING,
+    rating: DataTypes.INTEGER,
+    max_combo: DataTypes.INTEGER,
+  },
+  {
+    underscored: true,
+  }
+);
+
+Chart.belongsTo(Song, {
+  foreignKey: {
+    name: 'song_id',
+  },
 });
-
-Chart.belongsTo(Song);
-Song.hasMany(Chart);
+// I tried commenting this out, but songsController.getSongById broke
+Song.hasMany(Chart, {
+  foreignKey: {
+    name: 'song_id',
+  },
+});
 
 module.exports = Chart;

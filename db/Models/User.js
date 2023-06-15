@@ -3,7 +3,7 @@ const pool = require('../db-config')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-const User = pool.define('User', {
+const User = pool.define('user', {
   username: DataTypes.STRING,
   password: DataTypes.STRING,
 }, {

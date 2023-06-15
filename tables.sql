@@ -18,6 +18,7 @@ CREATE TABLE songs (
   type text NOT NULL, --Normal, shortcut, full song, remix
   max_bpm float NOT NULL,
   min_bpm float NOT NULL,
+  banner_img text NOT NULL,
   created_at date NOT NULL,
   updated_at date NOT NULL
 );
@@ -39,9 +40,8 @@ CREATE TABLE scores (
   goods integer,
   bads integer,
   misses integer,
-  max_combo integer,
   total_score integer NOT NULL,
-  pass boolean NOT NULL, --Pass or fail?
+  stage_pass boolean NOT NULL, --Pass or fail?
   user_id integer NOT NULL,
   chart_id integer NOT NULL,
   created_at date NOT NULL,

@@ -1,13 +1,13 @@
 const Chart = require('../../db/Models/Chart');
 const Song = require('../../db/Models/Song');
 
-const songController = {
+const songsController = {
   getAllSongs: async function (req, res, next) {
     try {
       res.locals.allSongs = await Song.findAll();
       return next();
     } catch (err) {
-      err.log = 'An error occured in songController.getAllSongs';
+      err.log = 'An error occured in songsController.getAllSongs';
       return next(err);
     }
   },
@@ -15,20 +15,22 @@ const songController = {
     try {
       const id = req.params.id;
       const song = await Song.findOne({
+        include: [{
+          model: Chart,
+          required: true
+        }],
         where: { id: id },
       });
       if (!song) {
         throw {
           statusCode: 404,
-          message: `Unable to find song with the id: ${id}`,
+          message: `Unable to find the song with the id: ${id}`,
         };
       }
-      //TODO: Find all of this song's charts
-
       res.locals.song = song;
       return next();
     } catch (err) {
-      err.log = 'An error occured in songController.getSongById';
+      err.log = 'An error occured in songsController.getSongById';
       return next(err);
     }
   },
@@ -41,6 +43,7 @@ const songController = {
       const max_bpm = body.max_bpm;
       const min_bpm = body.min_bpm;
       const charts = body.charts;
+      const banner_img = body.banner_img;
       // Return an error if anything is missing in the request body
       let missingField = null;
       if (!title) missingField = 'title';
@@ -49,6 +52,7 @@ const songController = {
       if (!max_bpm) missingField = 'max_bpm';
       if (!min_bpm) missingField = 'min_bpm';
       if (!charts) missingField = 'charts';
+      if (!banner_img) missingField = 'banner_img';
       if (missingField) {
         throw {
           statusCode: 400,
@@ -131,6 +135,7 @@ const songController = {
         type,
         max_bpm,
         min_bpm,
+        banner_img,
       });
       // For each chart in the song, create a new chart
       await Promise.all(
@@ -150,19 +155,20 @@ const songController = {
       res.locals.newSong = newSong;
       return next();
     } catch (err) {
-      err.log = 'An error occured in songController.createSong';
+      err.log = 'An error occured in songsController.createSong';
       return next(err);
     }
   },
   modifySongById: async function (req, res, next) {
     try {
       const id = req.params.id;
+      // Make sure the song exists first
       const song = await Song.findOne({
         where: { id: id },
       });
       if (!song) {
         throw {
-          statusCode: 400,
+          statusCode: 404,
           message: `Unable to find a song with the id: '${id}'`,
         };
       }
@@ -172,33 +178,35 @@ const songController = {
       const type = body.type;
       const max_bpm = body.max_bpm;
       const min_bpm = body.min_bpm;
-      const newProperties = {};
       // Copy only the properties that can exist on a song
+      const newProperties = {};
       if (title) newProperties.title = title;
       if (artist) newProperties.artist = artist;
       if (type) newProperties.type = type;
       if (max_bpm) newProperties.max_bpm = max_bpm;
       if (min_bpm) newProperties.min_bpm = min_bpm;
-      await Song.update(newProperties, {
+      const updatedSong = await Song.update(newProperties, {
         where: { id: id },
+        returning: true,
       });
-      res.locals.updatedSong = song;
+      // Nice hacky way of accessing the data that I want
+      res.locals.updatedSong = updatedSong[1][0];
       return next();
     } catch (err) {
-      err.log = 'An error occured in songController.modifySongById';
+      err.log = 'An error occured in songsController.modifySongById';
       return next(err);
     }
   },
   deleteSongById: async function (req, res, next) {
     try {
       const id = req.params.id;
-      // Check if the songs exists
+      // Check if the song exists
       const song = await Song.findOne({
         where: { id: id },
       });
       if (!song) {
         throw {
-          statusCode: 400,
+          statusCode: 404,
           message: `Unable to find a song with the id: '${id}'`,
         };
       }
@@ -211,9 +219,34 @@ const songController = {
       res.locals.deletedSong = song;
       return next();
     } catch (err) {
-      err.log = 'An error occured in songController.deleteSongById';
+      err.log = 'An error occured in songsController.deleteSongById';
       return next(err);
     }
   },
+    // Gets song_id from the request body and throws an error if it doesn't exist
+    checkIfChartExists: async function (req, res, next) {
+      try {
+        const id = req.body.song_id;
+        if (!id) {
+          throw {
+            statusCode: 400,
+            message: 'Missing song_id from the request body',
+          };
+        }
+        const song = await Song.findOne({
+          where: { id: id },
+        });
+        if (!song) {
+          throw {
+            statusCode: 400,
+            message: `Unable to find song with the id: ${id}`,
+          };
+        }
+        return next();
+      } catch (err) {
+        err.log = 'Error in get songsController.checkIfSongExists';
+        return next(err);
+      }
+    },
 };
-module.exports = songController;
+module.exports = songsController;

@@ -1,0 +1,42 @@
+{
+  "title": "Mad5cience",
+  "artist": "Paul Bazooka",
+  "type": "Normal",
+  "min_bpm": 130,
+  "max_bpm": 130,
+  "banner_img": "mad5cience.png",
+  "charts": [
+      {
+          "style": "Single",
+          "rating": 5,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 15,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 20,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 7,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 16,
+          "max_combo": -1
+      },
+      {
+          "style": "Double-Performance",
+          "rating": 5,
+          "max_combo": -1,
+          "ass": "ass"
+      }
+  ]
+}
+

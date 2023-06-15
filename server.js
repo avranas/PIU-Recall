@@ -7,8 +7,10 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 
-app.use('/users', require('./routes/user-route'));
-app.use('/songs', require('./routes/song-route'));
+app.use('/users', require('./routes/users-route'));
+app.use('/songs', require('./routes/songs-route'));
+app.use('/charts', require('./routes/charts-route'));
+app.use('/scores', require('./routes/scores-route'));
 
 app.get('/test', (req, res) => {
   res.status(200).send('test test test!!');
