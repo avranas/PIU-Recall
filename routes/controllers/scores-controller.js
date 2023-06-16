@@ -20,17 +20,59 @@ const scoreController = {
       return next(err);
     }
   },
+  getScore: async function (req, res, next) {
+    try {
+      console.log(req.user.id)
+      console.log(req.params.chart_id)
+      console.log("==========")
+      const score = await Score.findOne({
+        where: { user_id: req.user.id, chart_id: req.params.chart_id },
+      });
+      if (!score) {
+        throw {
+          statusCode: 400,
+          message: "No score for this song"
+        }
+      }
+      res.locals.score = score;
+      return next();
+    } catch (err) {
+      return next(err);
+    }
+  },
+  getUsersScoreByChartId: async function (req, res, next) {
+    try {
+      const user_id = req.params.user_id;
+      const chart_id = req.params.chart_id;
+      const score = await Score.findOne({
+        where: {
+          user_id: user_id,
+          chart_id: chart_id,
+        },
+      });
+      if (!score) {
+        throw {
+          statusCode: 404,
+          message: 'Unable to find this score',
+        };
+      }
+      res.locals.score = score;
+      return next();
+    } catch (err) {
+      return next(err);
+    }
+  },
   createScore: async function (req, res, next) {
     try {
       const body = req.body;
-      console.log(body)
+      console.log(body);
       const greats = body.greats;
       const goods = body.goods;
       const bads = body.bads;
       const misses = body.misses;
       const total_score = body.total_score;
       const stage_pass = body.stage_pass;
-      const user_id = body.user_id;
+      const user_id = req.user.id;
       const chart_id = body.chart_id;
       // Return an error if anything is missing in the request body
       let missingField = null;
@@ -40,7 +82,6 @@ const scoreController = {
       if (misses === undefined) missingField = 'misses';
       if (total_score === undefined) missingField = 'total_score';
       if (stage_pass === undefined) missingField = 'stage_pass';
-      if (user_id === undefined) missingField = 'user_id';
       if (chart_id === undefined) missingField = 'chart_id';
       if (missingField) {
         throw {
@@ -52,14 +93,14 @@ const scoreController = {
       const duplicate = await Score.findAll({
         where: {
           user_id,
-          chart_id
-        }
+          chart_id,
+        },
       });
       if (duplicate.length !== 0) {
         throw {
           statusCode: 400,
-          message: `This user already has a score on this chart`
-        }
+          message: `This user already has a score on this chart`,
+        };
       }
       //Create the new score
       const newScore = await Score.create({
@@ -107,10 +148,11 @@ const scoreController = {
       if (misses) newProperties.misses = misses;
       if (total_score) newProperties.total_score = total_score;
       if (stage_pass) newProperties.stage_pass = stage_pass;
-      await Score.update(newProperties, {
+      const updatedScore = await Score.update(newProperties, {
         where: { id: id },
+        returning: true,
       });
-      res.locals.updatedScore = song;
+      res.locals.updatedScore = updatedScore[1][0];
       return next();
     } catch (err) {
       err.log = 'An error occured in scoresController.modifyScoreById';

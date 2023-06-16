@@ -1,58 +1,45 @@
 import React, { useEffect, useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import HomePage from './pages/HomePage.jsx'
+import Register from "./pages/Register.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import SongList from "./pages/SongList.jsx";
+import '../styles.css';
+import ScoreEntry from "./pages/ScoreEntry.jsx";
 
-//TODO NEXT:
-//Wireframe project
+//TODO: Refreshing the page gives a 404 error
 
 function App() {
-  const [serverResponse, setServerResponse] = useState();
-  const [usernameInput, setUsernameInput] = useState();
-  const [passwordInput, setPasswordInput] = useState();
+  const navigate = useNavigate();
 
+  // TODO: BAD NOT DRY CODE FIX THIS
   useEffect(() => {
-    async function getHelloWorld() {
-      const response = await fetch('/test');
+    async function goToSongListIfAlreadyLoggedIn() {
+      const response = await fetch('/users');
       const text = await response.text();
-      console.log(text);
-
-      setServerResponse(text);
+      // If a User exists, navigate to song list
+      if (response.status === 200) {
+        navigate('/song-list')
+      }
     }
-    getHelloWorld();
+    goToSongListIfAlreadyLoggedIn();
   }, []);
 
-  function login() {
-    console.log(usernameInput)
-    console.log(passwordInput)
-    const body = {
-      username: usernameInput,
-      password: passwordInput
-    }
-    const response = fetch('/login', body);
-    console.log(response);
-    //TODO NEXT: Come back after I handle logging in
-    //Passport.js is next, then registering, then front end
-  }
   return (
     <div>
       <h1>PIU Recall</h1>
-      <div id="username-input">
-        <label htmlFor="username">username: </label>
-        <input
-          type="text"
-          id="username"
-          onChange={(e) => setUsernameInput(e.target.value)}
-        ></input>
-      </div>
-      <div id="password-input">
-        <label htmlFor="password">password: </label>
-        <input
-          type="password"
-          id="password"
-          onChange={(e) => setPasswordInput(e.target.value)}
-        ></input>
-      </div>
-      <button onClick={login}>Log in</button>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login-page" element={<LoginPage />} />
+        <Route path="/song-list" element={<SongList />} />
+        <Route path="/score-entry" element={<ScoreEntry />} />
+        <Route />
+      </Routes>
       <footer>
-        <p>Made with ❤️ by Alex Vranas</p>
+        <p>
+          Made with ❤️ by <a href="http://github.com/avranas">Alex Vranas</a>
+        </p>
       </footer>
     </div>
   );

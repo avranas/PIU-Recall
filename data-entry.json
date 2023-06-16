@@ -40,3 +40,259 @@
   ]
 }
 
+{
+  "title": "Csikos Post",
+  "artist": "BanYa",
+  "type": "Normal",
+  "min_bpm": 180,
+  "max_bpm": 180,
+  "banner_img": "csikos-post.png",
+  "charts": [
+      {
+          "style": "Single",
+          "rating": 4,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 7,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 8,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 11,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 13,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 8,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 16,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 22,
+          "max_combo": -1
+      },
+      {
+          "style": "Co-Op",
+          "rating": 2,
+          "max_combo": -1
+      }
+  ]
+}
+
+
+
+
+{
+  "title": "Pop the Track",
+  "artist": "J-Mi & Midi-D & Ft. Hanna Stockzell",
+  "type": "Normal",
+  "min_bpm": 160,
+  "max_bpm": 160,
+  "banner_img": "pop-the-track.png",
+  "charts": [
+      {
+          "style": "Single",
+          "rating": 2,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 4,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 7,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 9,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 16,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 18,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 9,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 18,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 20,
+          "max_combo": -1
+      },
+      {
+          "style": "Co-Op",
+          "rating": 2,
+          "max_combo": -1
+      }
+  ]
+}
+
+
+
+
+{
+  "title": "Gargoyle",
+  "artist": "Sanxion7",
+  "type": "Normal",
+  "min_bpm": 150,
+  "max_bpm": 150,
+  "banner_img": "gargoyle.png",
+  "charts": [
+      {
+          "style": "Single",
+          "rating": 4,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 7,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 9,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 18,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 22,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 12,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 20,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 23,
+          "max_combo": -1
+      },
+      {
+          "style": "Single-Performance",
+          "rating": 2,
+          "max_combo": -1
+      }
+  ]
+}
+
+
+
+
+
+{
+  "title": "Keep On!",
+  "artist": "雨漏りP/ AmamoriP",
+  "type": "Normal",
+  "min_bpm": 185,
+  "max_bpm": 185,
+  "banner_img": "keep-on.png",
+  "charts": [
+      {
+          "style": "Single",
+          "rating": 6,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 12,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 15,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 18,
+          "max_combo": -1
+      },
+      {
+          "style": "Single",
+          "rating": 21,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 12,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 17,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 20,
+          "max_combo": -1
+      },
+      {
+          "style": "Double",
+          "rating": 21,
+          "max_combo": -1
+      },
+      {
+          "style": "Single-Performance",
+          "rating": 3,
+          "max_combo": -1
+      }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

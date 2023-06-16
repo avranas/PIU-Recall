@@ -4,6 +4,8 @@ const User = require('../../db/Models/User');
 const usersController = {
   createUser: async function (req, res, next) {
     try {
+      console.log("MAKING NEW USER")
+      console.log(req.body);
       const body = req.body;
       const username = body.username;
       const password = body.password;
@@ -16,6 +18,18 @@ const usersController = {
           statusCode: 400,
           message: `'${missingField} is missing from the request body'`,
         };
+      }
+      if (typeof password !== "string") {
+        throw {
+          statusCode: 400,
+          message: `password must be a string`
+        }
+      }
+      if (typeof username !== "string") {
+        throw {
+          statusCode: 400,
+          message: `username must be a string`
+        }
       }
       // If user with the same name already exists throw an error
       const user = await User.findOne({
@@ -93,6 +107,7 @@ const usersController = {
     }
   },
   //Gets user_id from the request body and throws an error if it doesn't exist
+  // TODO: I might not need this after implementing authentication. Look into this
   checkIfUserExists: async function (req, res, next) {
     try {
       const id = req.body.user_id;

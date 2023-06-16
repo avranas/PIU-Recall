@@ -30,9 +30,9 @@ module.exports = {
     }
   },
   // Everything seems to work when this is commented out. Do I really need this?
-  // resolve: {
-  //   extensions: ['.js', '.jsx', '.json'],
-  // },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json', '.css'],
+  },
   module: {
     rules: [
       // Parse JS and JSX files
@@ -41,6 +41,10 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: 'babel-loader',
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

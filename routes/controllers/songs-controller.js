@@ -1,10 +1,19 @@
 const Chart = require('../../db/Models/Chart');
+const Score = require("../../db/Models/Score");
 const Song = require('../../db/Models/Song');
 
 const songsController = {
   getAllSongs: async function (req, res, next) {
     try {
-      res.locals.allSongs = await Song.findAll();
+      console.log('req.user', req.user);
+      const allSongs = await Song.findAll({
+        include: [
+          {
+            model: Chart,
+            required: true,
+          },
+        ]});
+      res.locals.allSongs = allSongs;
       return next();
     } catch (err) {
       err.log = 'An error occured in songsController.getAllSongs';
@@ -15,10 +24,12 @@ const songsController = {
     try {
       const id = req.params.id;
       const song = await Song.findOne({
-        include: [{
-          model: Chart,
-          required: true
-        }],
+        include: [
+          {
+            model: Chart,
+            required: true,
+          },
+        ],
         where: { id: id },
       });
       if (!song) {
@@ -36,6 +47,7 @@ const songsController = {
   },
   createSong: async function (req, res, next) {
     try {
+      console.log('creating song');
       const body = req.body;
       const title = body.title;
       const artist = body.artist;
@@ -60,13 +72,8 @@ const songsController = {
         };
       }
       // type can only be one of these:
-      const typeOptions = [
-        'Normal',
-        'Full Song',
-        'Shortcut',
-        'Remix',
-      ];
-      if (!(typeOptions.includes(type))) {
+      const typeOptions = ['Normal', 'Full Song', 'Shortcut', 'Remix'];
+      if (!typeOptions.includes(type)) {
         throw {
           statusCode: 400,
           message: `Invalid entry for 'type'`,
@@ -105,15 +112,15 @@ const songsController = {
         if (!Number.isInteger(rating)) {
           throw {
             statusCode: 400,
-            message: 'rating must be an integer'
-          }
+            message: 'rating must be an integer',
+          };
         }
         if (!Number.isInteger(max_combo)) {
           throw {
             statusCode: 400,
-            message: 'max_combo must be an integer'
-          }
-        }        
+            message: 'max_combo must be an integer',
+          };
+        }
         const styleOptions = [
           'Single',
           'Double',
@@ -121,7 +128,7 @@ const songsController = {
           'Double-Performance',
           'Co-Op',
         ];
-        if (!(styleOptions.includes(style))) {
+        if (!styleOptions.includes(style)) {
           throw {
             statusCode: 400,
             message: `Invalid entry for 'style' in charts`,
@@ -148,7 +155,7 @@ const songsController = {
             style,
             rating,
             max_combo,
-            song_id: newSong.id
+            song_id: newSong.id,
           });
         })
       );
@@ -210,12 +217,42 @@ const songsController = {
           message: `Unable to find a song with the id: '${id}'`,
         };
       }
+      console.log(1);
+      //Get all of the song's charts
+      const charts = await Chart.findAll({
+        where: { song_id: song.id },
+      });
+      await Promise.all(
+        charts.map((chart) => {
+          //Create a new chart here
+          const style = chart.style;
+          const rating = chart.rating;
+          const max_combo = chart.max_combo;
+          return Score.destroy({
+            where: {chart_id: chart.id}
+          });
+        })
+      );
+
+
+
+
+
       //Delete all of the song's charts here
-      await Chart.destroy({where: {song_id: song.id}})
+      await Chart.destroy({ where: { song_id: song.id } });
+      console.log(2);
+
+
+
+
+
+      
       // Delete the song
       await Song.destroy({
         where: { id: id },
       });
+      console.log(3);
+
       res.locals.deletedSong = song;
       return next();
     } catch (err) {
@@ -223,30 +260,30 @@ const songsController = {
       return next(err);
     }
   },
-    // Gets song_id from the request body and throws an error if it doesn't exist
-    checkIfChartExists: async function (req, res, next) {
-      try {
-        const id = req.body.song_id;
-        if (!id) {
-          throw {
-            statusCode: 400,
-            message: 'Missing song_id from the request body',
-          };
-        }
-        const song = await Song.findOne({
-          where: { id: id },
-        });
-        if (!song) {
-          throw {
-            statusCode: 400,
-            message: `Unable to find song with the id: ${id}`,
-          };
-        }
-        return next();
-      } catch (err) {
-        err.log = 'Error in get songsController.checkIfSongExists';
-        return next(err);
+  // Gets song_id from the request body and throws an error if it doesn't exist
+  checkIfChartExists: async function (req, res, next) {
+    try {
+      const id = req.body.song_id;
+      if (!id) {
+        throw {
+          statusCode: 400,
+          message: 'Missing song_id from the request body',
+        };
       }
-    },
+      const song = await Song.findOne({
+        where: { id: id },
+      });
+      if (!song) {
+        throw {
+          statusCode: 400,
+          message: `Unable to find song with the id: ${id}`,
+        };
+      }
+      return next();
+    } catch (err) {
+      err.log = 'Error in get songsController.checkIfSongExists';
+      return next(err);
+    }
+  },
 };
 module.exports = songsController;
